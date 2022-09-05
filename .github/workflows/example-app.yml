@@ -36,6 +36,11 @@ jobs:
     - run: npm test
 
     - name: 'Build Docker Image'
+      uses: azure/docker-login@v1
+      with:
+            login-server: ${{ env.ACR_LOGON_SERVER }}
+            username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
+            password: ${{ secrets.SERVICE_PRINCIPAL_PASSWORD }}
     - run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
     - run: echo $RELEASE_VERSION
     # - run: docker build . -t ${{ env.IMAGE_NAME }}
