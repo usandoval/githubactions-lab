@@ -1,10 +1,10 @@
-name: App Deployment
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+name: App_Deployment
 
 env:
   ACR_LOGON_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
