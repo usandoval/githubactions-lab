@@ -2,7 +2,7 @@ name: App_Deployment
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "feature_02" ]
   pull_request:
     branches: [ "main" ]
 
@@ -28,3 +28,16 @@ jobs:
     - run: |
         docker build . -t ${{ env.IMAGE_NAME }}
         docker push ${{ env.IMAGE_NAME }}
+
+    - name: 'Deploy to Azure Container Instances'
+      uses: 'azure/aci-deploy@v1'
+      with:
+        resource-group: ${{ secrets.RESOURCE_GROUP }}
+        dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+        image: ${{ env.IMAGE_NAME }}
+        registry-login-server: ${{ env.ACR_LOGON_SERVER }}
+        registry-username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
+        registry-password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
+        name: angular-app
+        location: 'east us'
+
