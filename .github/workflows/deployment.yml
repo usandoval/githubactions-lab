@@ -1,10 +1,10 @@
+name: App_Deployment
+
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
-name: App_Deployment
 
 env:
   ACR_LOGON_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
@@ -17,18 +17,9 @@ jobs:
 
     steps:
     - name: 'Checkout GitHub Action'
-    - uses: actions/checkout@v3
-    - name: Build Application - Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: echo Image name ${{ env.IMAGE_NAME }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
+      uses: actions/checkout@v3
 
-    - name: 'Build Docker Image'
+    - name: 'Build and push Docker Image'
       uses: azure/docker-login@v1
       with:
         login-server: ${{ env.ACR_LOGON_SERVER }}
