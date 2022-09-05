@@ -13,7 +13,7 @@ on:
 
 env:
   ACR_LOGON_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
-  IMAGE_NAME: ${{ secrets.ACR_NAME }}.azurecr.io/angularapp:${{ github.ref }}
+  IMAGE_NAME: ${{ secrets.ACR_NAME }}.azurecr.io/angularapp:${{ github.sha }}
 
 jobs:
   build:
@@ -38,10 +38,10 @@ jobs:
     - run: npm run build --if-present
     - run: npm test
 
-    # - name: 'Build Docker Image'
-    #  uses: azure/docker-login@v1
-    #  with:
-    #        login-server: ${{ env.ACR_LOGON_SERVER }}
-    #        username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
-    #        password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
-    # - run: docker build . -t ${{ env.IMAGE_NAME }}
+    - name: 'Build Docker Image'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.ACR_LOGON_SERVER }}
+        username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
+        password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
+    - run: docker build . -t ${{ env.IMAGE_NAME }}
