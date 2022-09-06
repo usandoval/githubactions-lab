@@ -1,8 +1,9 @@
 name: App_Deployment
 
 on:
-  push:
-    branches: [ "feature_05" ]
+  pull_request:
+    branches: [ "main" ]
+    types: [closed]
 
 env:
   ACR_LOGON_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
