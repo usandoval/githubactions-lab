@@ -1,9 +1,8 @@
 name: App_Deployment
 
 on:
-  pull_request:
-    branches: [ "main" ]
-    types: [closed]
+  push:
+    branches: [ "feature_05" ]
 
 env:
   ACR_LOGON_SERVER: ${{ secrets.ACR_NAME }}.azurecr.io
@@ -29,15 +28,27 @@ jobs:
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: 'Build and push Docker Image'
+    - name: 'Build Docker Image'
       uses: azure/docker-login@v1
       with:
         login-server: ${{ env.ACR_LOGON_SERVER }}
         username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
         password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
-    - run: |
-        docker build . -t ${{ env.IMAGE_NAME }}
-        docker push ${{ env.IMAGE_NAME }}
+    - run: docker build . -t ${{ env.IMAGE_NAME }}
+
+    - name: 'Security Scan for Docker Image'
+      uses: Azure/container-scan@v0
+      with:
+        image-name: ${{ env.IMAGE_NAME }}
+        severity-threshold: 'MEDIUM'
+
+    - name: 'Push Docker Image'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.ACR_LOGON_SERVER }}
+        username: ${{ secrets.SERVICE_PRINCIPAL_ID }}
+        password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
+    - run: docker push ${{ env.IMAGE_NAME }}
 
     - name: 'Deploy to Azure Container Instances'
       uses: 'azure/aci-deploy@v1'
@@ -50,4 +61,4 @@ jobs:
         registry-password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
         name: angular-app
         location: 'east us'
-
+        
