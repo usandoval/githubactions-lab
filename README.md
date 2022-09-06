@@ -18,6 +18,6 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ## GitHub Actions Workflows
-build-test.yml - Triggered by push in feature branches. Code checkout, dependencies resolution and Angular compilation. Includes Angular basic test and SAST using SonarCloud scan
+`build-test.yml` - Triggered by push in feature branches. Code checkout, dependencies resolution and Angular compilation. Includes Angular basic test and SAST using SonarCloud scan
 
-deployment.yml - Creates a Docker image for the Angular application. Uses SAST using SonarCloud scan and Container security scan using Azure/container-scan action. Finally deploys application image into Azure Container Instances
+`deployment.yml` - Creates a Docker image for the Angular application. Uses SAST using SonarCloud scan and Container security scan using Azure/container-scan action. Finally deploys application image into Azure Container Instances
