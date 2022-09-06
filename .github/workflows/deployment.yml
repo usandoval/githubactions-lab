@@ -41,6 +41,8 @@ jobs:
       with:
         image-name: ${{ env.IMAGE_NAME }}
         severity-threshold: 'MEDIUM'
+      env:
+        DOCKLE_HOST: "unix:///var/run/docker.sock"
 
     - name: 'Push Docker Image'
       uses: azure/docker-login@v1
@@ -61,4 +63,3 @@ jobs:
         registry-password: ${{ secrets.SERVICE_PRINCIPAL_TOKEN }}
         name: angular-app
         location: 'east us'
-        
