@@ -11,7 +11,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: staging
+    environment: STAGING
 
     strategy:
       matrix:
@@ -26,7 +26,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: echo Image name ${{ env.IMAGE_NAME }}
     - run: npm ci
     - run: npm run build --if-present
 
