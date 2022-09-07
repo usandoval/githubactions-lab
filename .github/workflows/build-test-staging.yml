@@ -31,4 +31,6 @@ jobs:
     - run: npm run build --if-present
 
     - name: Use Staging environment secrets
-      run: echo ${{ secrets.STAGING_RESOURCE_GROUP }}
+      env: 
+        STG_RG: ${{ secrets.STAGING_RESOURCE_GROUP }}
+      run: echo Resource Group to use $STG_RG
